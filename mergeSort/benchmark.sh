@@ -1,3 +1,5 @@
+#! /bin/bash
+
 SOURCE_FILE="benchMark.cpp"
 
 MERGE_SORT_FUNCTIONS="mergeSort.cpp"
