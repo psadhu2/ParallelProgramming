@@ -8,9 +8,6 @@
 std::string toString(std::vector<int> array);
 
 
-// Need to debug mergeSort function
-
-
 int main () {
     using std::cout;
     using std::cin;
@@ -28,7 +25,7 @@ int main () {
     
     for (int i = 0; i < size; i++) {
         std::random_device r;
-        std::uniform_int_distribution<int> randNums(1, 1000);
+        std::uniform_int_distribution<int> randNums(1, 10000000);
 
         int rN = randNums(r);
         array.push_back(rN);

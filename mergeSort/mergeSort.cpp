@@ -1,7 +1,9 @@
 #include <iostream>
 #include "merge_sort_functions.h"
 
-std::vector<int> mergeSort(std::vector<int> array) {
+//Issues: The function copies all the values of the array every time is called causing insanely high memory overload
+
+std::vector<int> mergeSort(std::vector<int> &array) {
     int length = array.size();
 
     if (length <= 1) {
@@ -20,7 +22,7 @@ std::vector<int> mergeSort(std::vector<int> array) {
     return merge(left, right);
 }
 
-std::vector<int> merge(std::vector<int> leftArray, std::vector<int> rightArray) {
+std::vector<int> merge(std::vector<int> &leftArray, std::vector<int> &rightArray) {
     std::vector<int> array;
 
     int i = 0; // ptr to traverse first array
