@@ -1,14 +1,3 @@
-g++ main.cpp mergeSort.cpp -o a
-./a
-or run the code through the script using:
-chmod +x mergeSort.sh for the first time
-then run ./mergeSort.sh
-then ./a.exe
-then type in the size of the array you want to sort
-
-In order to run the benchmarks you would need to do it through the benchmark.sh script
-only for the first time: chmod +x benchmark.sh
-then run ./benchmark.sh
 ## Merge Sort Project
 
 This project demonstrates the implementation and benchmarking of the Merge Sort algorithm in C++.
