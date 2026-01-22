@@ -2,9 +2,9 @@
 #include <vector>
 #include <random>
 #include <chrono>
+#include "merge_sort_functions.h"
 
-std::vector<int> mergeSort(std::vector<int> array);
-std::vector<int> merge(std::vector<int> arrayA, std::vector<int> arrayB);
+
 std::string toString(std::vector<int> array);
 
 
@@ -37,17 +37,17 @@ int main () {
 
     cout << "Unsorted array: " << toString(array) << '\n';
 
-    auto start = high_resolution_clock::now();
+    auto start = std::chrono::steady_clock::now();
 
     std::vector<int> sorted = mergeSort(array);
 
-    auto end = high_resolution_clock::now();
+    auto end = std::chrono::steady_clock::now();
 
     cout << "Sorted array: " << toString(sorted) << '\n';
 
-    auto duration = duration_cast<milliseconds>(end - start).count();
+    double duration = std::chrono::duration<double>(end - start).count();
 
-    cout << "It took " << duration << " milliseconds to sort the array" << '\n';
+    cout << "It took " << duration << " seconds to sort the array" << '\n';
 
     return 0;
 }
@@ -63,52 +63,4 @@ std::string toString(std::vector<int> array) {
     }
     strRandList += "]";
     return strRandList;
-}
-
-
-std::vector<int> mergeSort(std::vector<int> array) {
-    int length = array.size();
-
-    if (length <= 1) {
-        return array;
-    }
-
-    int mid = (length / 2);
-
-    std::vector<int> arrayLeft(array.begin(), array.begin() + mid);
-    std::vector<int> arrayRight(array.begin() + mid, array.end());
-
-
-    std::vector<int> left = mergeSort(arrayLeft);
-    std::vector<int> right = mergeSort(arrayRight);
-
-    return merge(left, right);
-}
-
-std::vector<int> merge(std::vector<int> leftArray, std::vector<int> rightArray) {
-    std::vector<int> array;
-
-    int i = 0; // ptr to traverse first array
-    int j = 0; // ptr to traverse second array
-
-    while (i < leftArray.size() && j < rightArray.size()) {
-        if (leftArray[i] < rightArray[j]) {
-            array.push_back(leftArray[i]);
-            i++;
-        } else {
-            array.push_back(rightArray[j]);
-            j++;
-        }
-    }
-
-    while (i < leftArray.size()) {
-        array.push_back(leftArray[i]);
-        i++;
-    }
-    while (j < rightArray.size()) {
-        array.push_back(rightArray[j]);
-        j++;
-    }
-
-    return array;
 }
