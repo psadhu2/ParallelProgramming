@@ -13,7 +13,7 @@ int main(int argc, char* argv[]) {
 
     int size = std::stoi(argv[1]);
     
-    std::vector<int> array;
+    std::vector<int> array(size);
 
     std::random_device r;
     std::mt19937 gen(r());
