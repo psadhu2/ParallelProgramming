@@ -1,51 +1,99 @@
 #include <iostream>
 #include "merge_sort_functions.h"
 
-//Issues: The function copies all the values of the array every time is called causing insanely high memory overload
-
-std::vector<int> mergeSort(std::vector<int> &array) {
-    int length = array.size();
-
-    if (length <= 1) {
-        return array;
+void mergeSortFast(std::vector<int> &array, int leftIdx, int rightIdx) {
+    if (leftIdx >= rightIdx) {
+        return;
     }
-
-    int mid = (length / 2);
-
-    std::vector<int> arrayLeft(array.begin(), array.begin() + mid);
-    std::vector<int> arrayRight(array.begin() + mid, array.end());
-
-
-    std::vector<int> left = mergeSort(arrayLeft);
-    std::vector<int> right = mergeSort(arrayRight);
-
-    return merge(left, right);
+    int midIdx = (leftIdx + rightIdx) / 2;
+    mergeSortFast(array, leftIdx, midIdx);
+    mergeSortFast(array, midIdx + 1, rightIdx);
+    mergeFast(array, leftIdx, midIdx, rightIdx);
 }
 
-std::vector<int> merge(std::vector<int> &leftArray, std::vector<int> &rightArray) {
-    std::vector<int> array;
+void mergeFast(std::vector<int> &array, int leftIdx, int midIdx, int rightIdx) {
+    std::vector<int> leftArray(midIdx - leftIdx + 1), rightArray(rightIdx - midIdx);
 
-    int i = 0; // ptr to traverse first array
-    int j = 0; // ptr to traverse second array
+    for (int i = 0; i < leftArray.size(); i++) {
+        leftArray[i] = array[leftIdx + i];
+    }
+    
+    for (int i = 0; i < rightArray.size(); i++) {
+        rightArray[i] = array[midIdx + 1 + i];
+    }
+
+    int i = 0, j = 0;
+    int k = leftIdx;
 
     while (i < leftArray.size() && j < rightArray.size()) {
         if (leftArray[i] < rightArray[j]) {
-            array.push_back(leftArray[i]);
+            array[k] = leftArray[i];
             i++;
         } else {
-            array.push_back(rightArray[j]);
+            array[k] = rightArray[j];
             j++;
         }
+        k++;
     }
 
     while (i < leftArray.size()) {
-        array.push_back(leftArray[i]);
+        array[k] = leftArray[i];
         i++;
-    }
-    while (j < rightArray.size()) {
-        array.push_back(rightArray[j]);
-        j++;
+        k++;
     }
 
-    return array;
+    while (j < rightArray.size()) {
+        array[k] = rightArray[j];
+        j++;
+        k++;
+    }
 }
+
+//Issues: The function copies all the values of the array every time is called causing insanely high memory overload
+
+// std::vector<int> mergeSort(std::vector<int> &array) {
+//     int length = array.size();
+
+//     if (length <= 1) {
+//         return array;
+//     }
+
+//     int mid = (length / 2);
+
+//     std::vector<int> arrayLeft(array.begin(), array.begin() + mid);
+//     std::vector<int> arrayRight(array.begin() + mid, array.end());
+
+
+//     std::vector<int> left = mergeSort(arrayLeft);
+//     std::vector<int> right = mergeSort(arrayRight);
+
+//     return merge(left, right);
+// }
+
+// std::vector<int> merge(std::vector<int> &leftArray, std::vector<int> &rightArray) {
+//     std::vector<int> array;
+
+//     int i = 0; // ptr to traverse first array
+//     int j = 0; // ptr to traverse second array
+
+//     while (i < leftArray.size() && j < rightArray.size()) {
+//         if (leftArray[i] < rightArray[j]) {
+//             array.push_back(leftArray[i]);
+//             i++;
+//         } else {
+//             array.push_back(rightArray[j]);
+//             j++;
+//         }
+//     }
+
+//     while (i < leftArray.size()) {
+//         array.push_back(leftArray[i]);
+//         i++;
+//     }
+//     while (j < rightArray.size()) {
+//         array.push_back(rightArray[j]);
+//         j++;
+//     }
+
+//     return array;
+// }

@@ -15,17 +15,18 @@ int main(int argc, char* argv[]) {
     
     std::vector<int> array;
 
-    for (int i = 0; i < size; i++) {
-        std::random_device r;
-        std::uniform_int_distribution<int> randNums(1, 1000);
+    std::random_device r;
+    std::mt19937 gen(r());
+    std::uniform_int_distribution<int> randNums(1, 1000);
 
-        int rN = randNums(r);
-        array.push_back(rN);
+    for (int i = 0; i < size; i++) {
+        array[i] = randNums(r);
     }
 
     auto start = std::chrono::steady_clock::now();
 
-    std::vector<int> sorted = mergeSort(array);
+    // std::vector<int> sorted = mergeSort(array);
+    mergeSortFast(array, 0, array.size() - 1);
 
     auto end = std::chrono::steady_clock::now();
 

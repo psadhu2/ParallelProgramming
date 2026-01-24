@@ -5,7 +5,7 @@
 #include "merge_sort_functions.h"
 
 
-std::string toString(std::vector<int> array);
+std::string toString(std::vector<int> &array);
 
 
 int main () {
@@ -17,18 +17,18 @@ int main () {
     
     cout << "Input the size of an array you want to sort" << '\n';
     cin >> size;
-    std::vector<int> array;
+    std::vector<int> array(size);
 
     
     // Generating random numbers, then appending each random number 
     // to the array and adding to a string for a nice output
     
-    for (int i = 0; i < size; i++) {
-        std::random_device r;
-        std::uniform_int_distribution<int> randNums(1, 10000000);
+    std::random_device r;
+    std::mt19937 gen(r());
+    std::uniform_int_distribution<int> randNums(1, 1000);
 
-        int rN = randNums(r);
-        array.push_back(rN);
+    for (int i = 0; i < size; i++) {
+        array[i] = randNums(r);
     }
     
 
@@ -36,11 +36,11 @@ int main () {
 
     auto start = std::chrono::steady_clock::now();
 
-    std::vector<int> sorted = mergeSort(array);
+    mergeSortFast(array, 0, array.size() - 1);
 
     auto end = std::chrono::steady_clock::now();
 
-    cout << "Sorted array: " << toString(sorted) << '\n';
+    cout << "Sorted array: " << toString(array) << '\n';
 
     double duration = std::chrono::duration<double>(end - start).count();
 
@@ -50,7 +50,7 @@ int main () {
 }
 
 
-std::string toString(std::vector<int> array) {
+std::string toString(std::vector<int> &array) {
     std::string strRandList = "[";
     for (int i = 0; i < array.size(); i++) {
         strRandList += std::to_string(array[i]);
