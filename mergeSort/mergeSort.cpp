@@ -1,17 +1,17 @@
 #include <iostream>
 #include "merge_sort_functions.h"
 
-void mergeSortFast(std::vector<int> &array, int leftIdx, int rightIdx) {
+void mergeSort(std::vector<int> &array, int leftIdx, int rightIdx) {
     if (leftIdx >= rightIdx) {
         return;
     }
     int midIdx = (leftIdx + rightIdx) / 2;
-    mergeSortFast(array, leftIdx, midIdx);
-    mergeSortFast(array, midIdx + 1, rightIdx);
-    mergeFast(array, leftIdx, midIdx, rightIdx);
+    mergeSort(array, leftIdx, midIdx);
+    mergeSort(array, midIdx + 1, rightIdx);
+    merge(array, leftIdx, midIdx, rightIdx);
 }
 
-void mergeFast(std::vector<int> &array, int leftIdx, int midIdx, int rightIdx) {
+void merge(std::vector<int> &array, int leftIdx, int midIdx, int rightIdx) {
     std::vector<int> leftArray(midIdx - leftIdx + 1), rightArray(rightIdx - midIdx);
 
     for (int i = 0; i < leftArray.size(); i++) {

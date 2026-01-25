@@ -36,7 +36,7 @@ int main () {
 
     auto start = std::chrono::steady_clock::now();
 
-    mergeSortFast(array, 0, array.size() - 1);
+    mergeSort(array, 0, array.size() - 1);
 
     auto end = std::chrono::steady_clock::now();
 

@@ -26,7 +26,7 @@ int main(int argc, char* argv[]) {
     auto start = std::chrono::steady_clock::now();
 
     // std::vector<int> sorted = mergeSort(array);
-    mergeSortFast(array, 0, array.size() - 1);
+    mergeSort(array, 0, array.size() - 1);
 
     auto end = std::chrono::steady_clock::now();
 
