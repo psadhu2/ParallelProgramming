@@ -44,6 +44,17 @@ chmod +x benchmark.sh
 
 ---
 
+### Running on Centaurus
+
+To run the scripts on Centaurus:
+
+```sh
+sbatch ./benchmark
+sbatch ./mergeSort.sh
+```
+
+---
+
 ### Files
 - `main.cpp`, `mergeSort.cpp`, `merge_sort_functions.h`: Source code for merge sort
 - `mergeSort.sh`: Script to compile and run merge sort
