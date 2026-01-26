@@ -1,4 +1,8 @@
 #! /bin/bash
+#SBATCH --job-name=pranav-benchmark
+#SBATCH --partition=Centaurus
+#SBATCH --mem=32G
+#SBATCH --time=00:030:00
 
 SOURCE_FILE="benchMark.cpp"
 
