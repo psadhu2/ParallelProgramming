@@ -2,7 +2,7 @@
 #SBATCH --job-name=pranav-benchmark
 #SBATCH --partition=Centaurus
 #SBATCH --mem=10G
-#SBATCH --time=00:010:00
+#SBATCH --time=00:015:00
 
 SOURCE_FILE="benchMark.cpp"
 
