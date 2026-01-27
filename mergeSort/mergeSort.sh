@@ -1,7 +1,7 @@
 #! /bin/bash
 #SBATCH --job-name=pranav-merge-sort
 #SBATCH --partition=Centaurus
-#SBATCH --mem=32G
+#SBATCH --mem=10G
 #SBATCH --time=00:05:00
 
 SOURCE_FILE="main.cpp"
