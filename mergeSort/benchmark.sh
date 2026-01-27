@@ -12,7 +12,7 @@ EXECUTABLE="./merge.exe"
 
 OUT="results.csv"
 
-g++ "$SOURCE_FILE" "$MERGE_SORT_FUNCTIONS" -o "$EXECUTABLE"
+g++ -O3 "$SOURCE_FILE" "$MERGE_SORT_FUNCTIONS" -o "$EXECUTABLE"
 
 
 echo "input size,time" > "$OUT"
