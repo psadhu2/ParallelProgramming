@@ -1,0 +1,12 @@
+Benchmark run on Wed Feb 11 22:23:56 EST 2026
+Node: sadhuadi
+
+Running: Solar system (from solar.tsv), dt=200, steps=5000000
+Elapsed seconds: 1.92
+
+Running: Random 100 particles, dt=1, steps=10000
+Elapsed seconds: 0.66
+
+Running: Random 1000 particles, dt=1, steps=10000
+Elapsed seconds: 34.26
+
