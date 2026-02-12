@@ -1,3 +1,4 @@
+Building ./nbody from main.cpp...
 Benchmark run on Wed Feb 11 10:47:55 PM EST 2026
 Node: gal-c1.charlotte.edu
 
@@ -10,3 +11,4 @@ Elapsed seconds: 0.34
 Running: Random 1000 particles, dt=1, steps=10000
 Elapsed seconds: 24.52
 
+Done. Summary written to benchmark-summary.txt
