@@ -7,8 +7,7 @@
 
 set -euo pipefail
 
-# Under Slurm, run from the directory where sbatch was invoked.
-# Fallback to script directory for local/manual runs.
+
 if [[ -n "${SLURM_SUBMIT_DIR:-}" ]]; then
     cd "${SLURM_SUBMIT_DIR}"
 else
@@ -23,12 +22,7 @@ if [[ ! -f "${PLOT_SCRIPT}" ]]; then
     exit 1
 fi
 
-# Usage:
-#   ./n-body-plot-bench.sh
-#   ./n-body-plot-bench.sh 0.0
-#   ./n-body-plot-bench.sh 10000 bench-100.tsv bench-1000.tsv
-#
-# Default arrow scale if omitted:
+
 ARROW_SCALE="0.0"
 
 if [[ $# -ge 1 ]]; then

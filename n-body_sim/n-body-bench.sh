@@ -7,8 +7,6 @@
 
 set -euo pipefail
 
-# Under Slurm, run from the directory where sbatch was invoked.
-# Fallback to script directory for local/manual runs.
 if [[ -n "${SLURM_SUBMIT_DIR:-}" ]]; then
     cd "${SLURM_SUBMIT_DIR}"
 else
