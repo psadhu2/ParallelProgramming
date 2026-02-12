@@ -7,8 +7,14 @@
 
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "${SCRIPT_DIR}"
+# Under Slurm, run from the directory where sbatch was invoked.
+# Fallback to script directory for local/manual runs.
+if [[ -n "${SLURM_SUBMIT_DIR:-}" ]]; then
+    cd "${SLURM_SUBMIT_DIR}"
+else
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    cd "${SCRIPT_DIR}"
+fi
 
 BIN="./nbody"
 SRC="main.cpp"
