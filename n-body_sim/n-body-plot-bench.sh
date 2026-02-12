@@ -1,13 +1,25 @@
 #!/bin/bash
+#SBATCH --job-name=nbody-plot
+#SBATCH --partition=Centaurus
+#SBATCH --mem=10G
+#SBATCH --time=02:00:00
+#SBATCH --output=nbody-plot-%j.out
+
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "${SCRIPT_DIR}"
+# Under Slurm, run from the directory where sbatch was invoked.
+# Fallback to script directory for local/manual runs.
+if [[ -n "${SLURM_SUBMIT_DIR:-}" ]]; then
+    cd "${SLURM_SUBMIT_DIR}"
+else
+    cd "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+fi
 
+WORK_DIR="$(pwd)"
 PLOT_SCRIPT="plot.py"
 
 if [[ ! -f "${PLOT_SCRIPT}" ]]; then
-    echo "Error: ${PLOT_SCRIPT} not found in ${SCRIPT_DIR}"
+    echo "Error: ${PLOT_SCRIPT} not found in ${WORK_DIR}"
     exit 1
 fi
 
