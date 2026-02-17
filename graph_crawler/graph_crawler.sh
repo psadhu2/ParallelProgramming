@@ -9,4 +9,3 @@ SOURCE_FILE="bfs.cpp"
 EXECUTABLE="bfs.exe"
 
 g++ "$SOURCE_FILE" -I. -o "$EXECUTABLE" -lcurl
-./"$EXECUTABLE"
