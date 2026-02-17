@@ -18,4 +18,5 @@ if [ -z "$QUERY" ] || [ -z "$DEPTH" ]; then
   exit 1
 fi
 
+echo "Running with query=[$QUERY], depth=[$DEPTH]"
 ./"$EXECUTABLE" "$QUERY" "$DEPTH"

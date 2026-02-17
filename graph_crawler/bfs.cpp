@@ -103,17 +103,18 @@ void bfs(string query, int depth) {
 }
 
 int main(int argc, char* argv[]) {
-    string query;
-    int depth = 0;
+    if (argc < 3) {
+        cerr << "Usage: ./bfs.exe \"Actor or Movie\" <depth>" << endl;
+        return 1;
+    }
 
-    if (argc >= 3) {
-        query = argv[1];
+    string query = argv[1];
+    int depth = 0;
+    try {
         depth = stoi(argv[2]);
-    } else {
-        cout << "Enter an actor's name or a movie name: ";
-        getline(cin, query);
-        cout << "Enter the distance you want to crawl in the tree: ";
-        cin >> depth;
+    } catch (...) {
+        cerr << "Depth must be an integer." << endl;
+        return 1;
     }
 
     if (query.empty()) {
