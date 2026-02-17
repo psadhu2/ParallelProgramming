@@ -8,14 +8,6 @@
 using namespace std;
 using namespace rapidjson;
 
-/*
-bfs function will basically take in the head node and will output all the neighbors
-based off of the depth inputed we will need to do some kind of json parsing
-on the neigbhors and get their output too.
-so bfs will need to take in a string name for the url and int depth
-bfs will need a helper function called jsonParser to parse through the neighbors of the
-head node
-*/
 
 static size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* userp) {
     ((std::string*)userp)->append((char*)contents, size * nmemb);
@@ -110,13 +102,25 @@ void bfs(string query, int depth) {
     }
 }
 
-int main() {
+int main(int argc, char* argv[]) {
     string query;
-    cout << "Enter an actor's name or a movie name: ";
-    getline(cin, query);
-    int depth;
-    cout << "Enter the distance you want to crawl in the tree: ";
-    cin >> depth;
+    int depth = 0;
+
+    if (argc >= 3) {
+        query = argv[1];
+        depth = stoi(argv[2]);
+    } else {
+        cout << "Enter an actor's name or a movie name: ";
+        getline(cin, query);
+        cout << "Enter the distance you want to crawl in the tree: ";
+        cin >> depth;
+    }
+
+    if (query.empty()) {
+        cerr << "Query cannot be empty." << endl;
+        return 1;
+    }
+
     bfs(query, depth);
     return 0;
 }

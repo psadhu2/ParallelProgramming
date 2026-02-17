@@ -9,3 +9,13 @@ SOURCE_FILE="bfs.cpp"
 EXECUTABLE="bfs.exe"
 
 g++ "$SOURCE_FILE" -I. -o "$EXECUTABLE" -lcurl
+
+QUERY="$1"
+DEPTH="$2"
+
+if [ -z "$QUERY" ] || [ -z "$DEPTH" ]; then
+  echo "Usage: sbatch graph_crawler.sh \"Actor or Movie\" <depth>"
+  exit 1
+fi
+
+./"$EXECUTABLE" "$QUERY" "$DEPTH"
