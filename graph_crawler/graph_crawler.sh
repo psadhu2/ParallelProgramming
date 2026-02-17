@@ -1,8 +1,8 @@
 #!/bin/bash
-# SBATCH --job-name=pranav-graph-crawler
-# SBATCH --partition=Centaurus
-# SBATCH --mem=10G
-# SBATCH --time=00:05:00
+#SBATCH --job-name=pranav-graph-crawler
+#SBATCH --partition=Centaurus
+#SBATCH --mem=10G
+#SBATCH --time=00:05:00
 
 SOURCE_FILE="bfs.cpp"
 
