@@ -39,14 +39,12 @@ vector<string> jsonParser(string query) {
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
         CURLcode result = curl_easy_perform(curl);
 
-        // ✅ Check if the request was successful
         if (result != CURLE_OK) {
             cerr << "CURL error for " << query << ": " << curl_easy_strerror(result) << endl;
             curl_easy_cleanup(curl);
-            return neighbors;  // Return empty vector
+            return neighbors;
         }
 
-        // ✅ Check if we got any data
         if (readBuffer.empty()) {
             cerr << "Empty response for: " << query << endl;
             curl_easy_cleanup(curl);
@@ -56,7 +54,6 @@ vector<string> jsonParser(string query) {
         Document d;
         d.Parse(readBuffer.c_str());
 
-        // ✅ Check for parse errors
         if (d.HasParseError()) {
             cerr << "JSON parse error for " << query << ": " << d.GetParseError() << endl;
             cerr << "Response was: " << readBuffer << endl;
@@ -64,7 +61,6 @@ vector<string> jsonParser(string query) {
             return neighbors;
         }
 
-        // ✅ Check if it's an object before accessing members
         if (!d.IsObject()) {
             cerr << "Response is not a JSON object for: " << query << endl;
             cerr << "Response was: " << readBuffer << endl;
