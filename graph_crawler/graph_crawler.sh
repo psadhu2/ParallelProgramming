@@ -4,17 +4,24 @@
 #SBATCH --mem=10G
 #SBATCH --time=00:05:00
 
+set -euo pipefail
+
 SOURCE_FILE="bfs.cpp"
+EXECUTABLE="bfs"
+QUERY="${1:-}"
+DEPTH="${2:-}"
 
-EXECUTABLE="bfs.exe"
-
-g++ "$SOURCE_FILE" -I. -o "$EXECUTABLE" -lcurl
-
-QUERY="$1"
-DEPTH="$2"
+echo "Host: $(hostname)"
+echo "Compiler: $(g++ --version | head -n 1)"
 
 if [ -z "$QUERY" ] || [ -z "$DEPTH" ]; then
   echo "Usage: sbatch graph_crawler.sh \"Actor or Movie\" <depth>"
+  exit 1
+fi
+
+echo "Compiling $SOURCE_FILE -> $EXECUTABLE"
+if ! g++ -std=c++17 -O2 "$SOURCE_FILE" -I. -o "$EXECUTABLE" -lcurl; then
+  echo "Compile failed."
   exit 1
 fi
 
