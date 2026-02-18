@@ -5,14 +5,7 @@
 #SBATCH --time=00:05:00
 
 SOURCE_FILE="bfs.cpp"
-
 EXECUTABLE="bfs.exe"
 
 g++ "$SOURCE_FILE" -I. -o "$EXECUTABLE" -lcurl
-
-QUERY="$1"
-DEPTH="$2"
-
-g++ "$SOURCE_FILE" -I. -o "$EXECUTABLE" -lcurl
-
-echo -e "${QUERY}\n${DEPTH}" | ./"$EXECUTABLE"
+./"$EXECUTABLE" "$1" "$2"

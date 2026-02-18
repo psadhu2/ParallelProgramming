@@ -9,6 +9,7 @@ using namespace std;
 using namespace rapidjson;
 
 
+
 static size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* userp) {
     ((std::string*)userp)->append((char*)contents, size * nmemb);
     return size * nmemb;
@@ -103,18 +104,17 @@ void bfs(string query, int depth) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc < 3) {
-        cerr << "Usage: ./bfs.exe \"Actor or Movie\" <depth>" << endl;
-        return 1;
-    }
-
-    string query = argv[1];
+    string query;
     int depth = 0;
-    try {
+
+    if (argc >= 3) {
+        query = argv[1];
         depth = stoi(argv[2]);
-    } catch (...) {
-        cerr << "Depth must be an integer." << endl;
-        return 1;
+    } else {
+        cout << "Enter an actor's name or a movie name: ";
+        getline(cin, query);
+        cout << "Enter the distance you want to crawl in the tree: ";
+        cin >> depth;
     }
 
     if (query.empty()) {
