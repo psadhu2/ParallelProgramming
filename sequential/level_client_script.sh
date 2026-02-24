@@ -6,6 +6,6 @@
 #SBATCH --output=output_%j.txt
 #SBATCH --cpus-per-task=16
 
+make clean
 make
-
 ./level_client "$1" "$2"
