@@ -2,6 +2,7 @@
 #include <fstream>
 #include <random>
 #include <cmath>
+#include "omp_loop.hpp"
 
 double G = 6.674*std::pow(10,-11);
 //double G = 1;
@@ -131,12 +132,12 @@ void update_force(simulation& s, size_t from, size_t to) {
   s.fz[to] += dz*F;
 }
 
-void reset_force(simulation& s) {
-  for (size_t i=0; i<s.nbpart; ++i) {
+void reset_force(simulation& s, OmpLoop& omp) {
+  omp.parfor(0, s.nbpart, [&](size_t i) {
     s.fx[i] = 0.;
     s.fy[i] = 0.;
     s.fz[i] = 0.;
-  }
+  });
 }
 
 void apply_force(simulation& s, size_t i, double dt) {
@@ -178,9 +179,9 @@ void load_from_file(simulation& s, std::string filename) {
 }
 
 int main(int argc, char* argv[]) {
-  if (argc != 5) {
+  if (argc != 6) {
     std::cerr
-      <<"usage: "<<argv[0]<<" <input> <dt> <nbstep> <printevery>"<<"\n"
+      <<"usage: "<<argv[0]<<" <input> <dt> <nbstep> <printevery> <nbthreads>"<<"\n"
       <<"input can be:"<<"\n"
       <<"a number (random initialization)"<<"\n"
       <<"planet (initialize with solar system)"<<"\n"
@@ -191,8 +192,13 @@ int main(int argc, char* argv[]) {
   double dt = std::atof(argv[2]); //in seconds
   size_t nbstep = std::atol(argv[3]);
   size_t printevery = std::atol(argv[4]);
+  int nbthreads    = std::atoi(argv[5]);
   
-  
+  OmpLoop omp;
+  omp.setNbThread(nbthreads);
+  omp.setGranularity(1);
+
+
   simulation s(1);
 
   //parse command line
@@ -216,16 +222,19 @@ int main(int argc, char* argv[]) {
     if (step %printevery == 0)
       dump_state(s);
   
-    reset_force(s);
-    for (size_t i=0; i<s.nbpart; ++i)
-      for (size_t j=0; j<s.nbpart; ++j)
-	if (i != j)
-	  update_force(s, i, j);
+    reset_force(s, omp);
+    omp.parfor(0, s.nbpart, [&](size_t i) {
+      for (size_t j=0; j<s.nbpart; ++j) {
+        if (i != j) {
+          update_force(s, i, j);
+        }
+      }
+    });
 
-    for (size_t i=0; i<s.nbpart; ++i) {
+    omp.parfor(0, s.nbpart, [&](size_t i) {
       apply_force(s, i, dt);
       update_position(s, i, dt);
-    }
+    });
   }
   
   //dump_state(s);  
