@@ -29,78 +29,77 @@ void checkMergeSortResult (std::vector<int>& arr, size_t n) {
 }
 
 
-void merge(int * arr, size_t  l, size_t  mid, size_t r, int* temp) {
-  
+void merge(int* arr, size_t l, size_t mid, size_t r) {
+ 
 #if DEBUG
-  std::cout<<l<<" "<<mid<<" "<<r<<std::endl;
+  std::cout << l << " " << mid << " " << r << std::endl;
 #endif
-
+ 
   // short circuits
   if (l == r) return;
-  if (r-l == 1) {
+  if (r - l == 1) {
     if (arr[l] > arr[r]) {
-      size_t temp = arr[l];
+      int t = arr[l];
       arr[l] = arr[r];
-      arr[r] = temp;
+      arr[r] = t;
     }
     return;
   }
-
+ 
   size_t i, j, k;
   size_t n = mid - l;
-  
-  // init temp arrays
+ 
+  // local temp buffer — each call owns its own, no race condition
+  std::vector<int> temp(n);
+ 
   for (i=0; i<n; ++i)
     temp[i] = arr[l+i];
-
-  i = 0;    // temp left half
-  j = mid;  // right half
-  k = l;    // write to 
-
-  // merge
-  while (i<n && j<=r) {
-     if (temp[i] <= arr[j] ) {
-       arr[k++] = temp[i++];
-     } else {
-       arr[k++] = arr[j++];
-     }
+ 
+  i = 0;    // index into temp (left half)
+  j = mid;  // index into right half in arr
+  k = l;    // write position in arr
+ 
+  while (i < n && j <= r) {
+    if (temp[i] <= arr[j]) {
+      arr[k++] = temp[i++];
+    } else {
+      arr[k++] = arr[j++];
+    }
   }
-
-  // exhaust temp 
-  while (i<n) {
+ 
+  while (i < n) {
     arr[k++] = temp[i++];
   }
-
 }
 
-void mergesort(int * arr, size_t l, size_t r, int* temp) {
+void mergesort(int* arr, size_t l, size_t r) {
   if (l < r) {
-    size_t mid = (l+r)/2;
-    mergesort(arr, l, mid, temp);
-    mergesort(arr, mid+1, r, temp);
-    merge(arr, l, mid+1, r, temp);
+    size_t mid = (l + r) / 2;
+    mergesort(arr, l, mid);
+    mergesort(arr, mid + 1, r);
+    merge(arr, l, mid + 1, r);
   }
 }
 
-void mergesort_par(int* arr, size_t l, size_t r, int* temp) {
+void mergesort_par(int* arr, size_t l, size_t r) {
   if (l >= r) return;
  
   size_t mid = (l + r) / 2;
  
   if (r - l > THRESHOLD) {
-    tasking::taskstart([arr, l, mid, temp]() {
-      mergesort_par(arr, l, mid, temp);
+    tasking::taskstart([arr, l, mid]() {
+      mergesort_par(arr, l, mid);
     });
-    tasking::taskstart([arr, mid, r, temp]() {
-      mergesort_par(arr, mid + 1, r, temp);
+    tasking::taskstart([arr, mid, r]() {
+      mergesort_par(arr, mid + 1, r);
     });
     tasking::taskwait();
   } else {
-    mergesort(arr, l, mid, temp);
-    mergesort(arr, mid + 1, r, temp);
+    mergesort(arr, l, mid);
+    mergesort(arr, mid + 1, r);
   }
  
-  merge(arr, l, mid + 1, r, temp);
+  merge(arr, l, mid + 1, r);
 }
 
 
@@ -124,17 +123,15 @@ int main (int argc, char* argv[]) {
   std::cout<<std::endl;
 #endif
 
-  std::vector<int> temp(n);
-  int* arr_ptr  = &arr[0];
-  int* temp_ptr = &temp[0];
-  size_t sz     = n;
+  int* arr_ptr = &arr[0];
+  size_t sz = n;
 
   // begin timing
   std::chrono::time_point<std::chrono::system_clock> start = std::chrono::system_clock::now();
   
-  tasking::doinparallel([arr_ptr, sz, temp_ptr]() {
-    tasking::taskstart([arr_ptr, sz, temp_ptr]() {
-      mergesort_par(arr_ptr, 0, sz - 1, temp_ptr);
+  tasking::doinparallel([arr_ptr, sz]() {
+    tasking::taskstart([arr_ptr, sz]() {
+      mergesort_par(arr_ptr, 0, sz - 1);
     });
     tasking::taskwait();
   }, nthreads);
