@@ -1,0 +1,32 @@
+rm *.o
+rm mergesort_par.exe
+g++ -O3 -std=c++17 -fPIC -g -fopenmp -c mergesort_seq_nocopy.cpp -o mergesort_seq_nocopy.o
+g++  mergesort_seq_nocopy.o  -fopenmp -o mergesort_par
+========================================
+Merge Sort Benchmark
+========================================
+
+--- Array size: 100000 ---
+Sequential (1 thread): 0.00928656
+Parallel (1 threads): 0.00928174
+Parallel (2 threads): 0.00984005
+Parallel (4 threads): 0.00555152
+Parallel (8 threads): 0.00347763
+
+--- Array size: 1000000 ---
+Sequential (1 thread): 0.105473
+Parallel (1 threads): 0.105065
+Parallel (2 threads): 0.106549
+Parallel (4 threads): 0.0566972
+Parallel (8 threads): 0.0334622
+
+--- Array size: 10000000 ---
+Sequential (1 thread): 1.21236
+Parallel (1 threads): 1.21186
+Parallel (2 threads): 1.23463
+Parallel (4 threads): 0.648017
+Parallel (8 threads): 0.369175
+
+========================================
+Done
+========================================

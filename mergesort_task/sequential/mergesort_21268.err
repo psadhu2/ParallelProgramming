@@ -1,0 +1,2 @@
+rm: cannot remove 'mergesort_par.exe': No such file or directory
+make: [Makefile:18: clean] Error 1 (ignored)
