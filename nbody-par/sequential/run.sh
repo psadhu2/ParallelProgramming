@@ -6,6 +6,7 @@
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=4G
 #SBATCH --time=00:30:00
+#SBATCH --partition=Centaurus
 
 # Set OpenMP threads to match allocated CPUs
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
