@@ -8,8 +8,10 @@
 #include <algorithm>
 #include <chrono>
 #include <vector>
+#include "omp_tasking.hpp"
 
 #define DEBUG 0
+#define THRESHOLD 1000
 
 void generateMergeSortData (std::vector<int>& arr, size_t n) {
   for (size_t  i=0; i< n; ++i) {
@@ -80,15 +82,37 @@ void mergesort(int * arr, size_t l, size_t r, int* temp) {
   }
 }
 
+void mergesort_par(int* arr, size_t l, size_t r, int* temp) {
+  if (l >= r) return;
+ 
+  size_t mid = (l + r) / 2;
+ 
+  if (r - l > THRESHOLD) {
+    tasking::taskstart([arr, l, mid, temp]() {
+      mergesort_par(arr, l, mid, temp);
+    });
+    tasking::taskstart([arr, mid, r, temp]() {
+      mergesort_par(arr, mid + 1, r, temp);
+    });
+    tasking::taskwait();
+  } else {
+    mergesort(arr, l, mid, temp);
+    mergesort(arr, mid + 1, r, temp);
+  }
+ 
+  merge(arr, l, mid + 1, r, temp);
+}
+
 
 int main (int argc, char* argv[]) {
-  if (argc < 2) {
-    std::cerr<<"Usage: "<<argv[0]<<" <n>"<<std::endl;
+  if (argc < 3) {
+    std::cerr<<"Usage: "<<argv[0]<<" <n> <nthreads>"<<std::endl;
     return -1;
   }
   
   // command line parameter
   size_t n = atol(argv[1]);
+  int nthreads = atoi(argv[2]);
 
   // get arr data
   std::vector<int> arr (n);
@@ -100,12 +124,20 @@ int main (int argc, char* argv[]) {
   std::cout<<std::endl;
 #endif
 
+  std::vector<int> temp(n);
+  int* arr_ptr  = &arr[0];
+  int* temp_ptr = &temp[0];
+  size_t sz     = n;
+
   // begin timing
   std::chrono::time_point<std::chrono::system_clock> start = std::chrono::system_clock::now();
   
-  std::vector<int> temp (n);
-  // sort
-  mergesort(&(arr[0]), 0, n-1, &(temp[0]));
+  tasking::doinparallel([arr_ptr, sz, temp_ptr]() {
+    tasking::taskstart([arr_ptr, sz, temp_ptr]() {
+      mergesort_par(arr_ptr, 0, sz - 1, temp_ptr);
+    });
+    tasking::taskwait();
+  }, nthreads);
 
   // end timing
   std::chrono::time_point<std::chrono::system_clock> end = std::chrono::system_clock::now();
@@ -116,7 +148,7 @@ int main (int argc, char* argv[]) {
   checkMergeSortResult (arr, n);
 
 #if DEBUG
-  for (size_t i=0; i<n; ++i) 
+  for (size_t i=0; i<n; ++i)  
     std::cout<<arr[i]<<" ";
   std::cout<<std::endl;
 #endif
