@@ -27,4 +27,8 @@ make
 echo "----------------------------------------"
 echo "Running nbody.exe..."
 chmod +x nbody
-./nbody
+echo "Running solar system simulation..."
+./nbody planet 200 5000000 10000 $OMP_NUM_THREADS > solar.out
+
+echo "Running random simulation..."
+./nbody 1000 1 10000 100 $OMP_NUM_THREADS > random.out
