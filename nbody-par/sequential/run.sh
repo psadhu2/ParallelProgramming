@@ -16,6 +16,9 @@ echo "Using $OMP_NUM_THREADS OpenMP threads"
 echo "Job ID: $SLURM_JOB_ID"
 echo "----------------------------------------"
 
+# Remove old binary to force recompile on this node's architecture
+rm -f nbody.exe
+
 # Build with make
 echo "Building..."
 make
