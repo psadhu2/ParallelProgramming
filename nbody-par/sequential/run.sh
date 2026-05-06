@@ -17,7 +17,7 @@ echo "Job ID: $SLURM_JOB_ID"
 echo "----------------------------------------"
 
 # Remove old binary to force recompile on this node's architecture
-rm -f nbody.exe
+rm -f nbody
 
 # Build with make
 echo "Building..."
@@ -26,5 +26,5 @@ make
 # Run the executable
 echo "----------------------------------------"
 echo "Running nbody.exe..."
-chmod +x nbody.exe
-./nbody.exe
+chmod +x nbody
+./nbody
