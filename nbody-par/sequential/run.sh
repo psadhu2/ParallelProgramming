@@ -18,10 +18,10 @@ echo "----------------------------------------"
 
 # Build with make
 echo "Building..."
-make clean
 make
 
 # Run the executable
 echo "----------------------------------------"
 echo "Running nbody.exe..."
+chmod +x nbody.exe
 ./nbody.exe
